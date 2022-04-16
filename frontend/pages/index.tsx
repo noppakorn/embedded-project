@@ -1,32 +1,44 @@
-import { useState } from "react";
+import {
+  collection,
+  deleteDoc,
+  DocumentData,
+  getFirestore,
+  onSnapshot,
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import firebase from "../lib/firebase";
 
 const Index = () => {
-  let [students, setStudents] = useState<string[]>([
-    "Student 1",
-    "Student 2",
-    "Student 3",
-    "Student 4",
-    "Student 5",
-    "Student 6",
-    "Student 7",
-    "Student 8",
-    "Student 9",
-  ]);
+  const [students, setStudents] = useState<DocumentData[]>([]);
+  useEffect(() => {
+    const db = getFirestore(firebase);
+    const studentsRef = collection(db, "students-name");
+    const unsubscribe = onSnapshot(studentsRef, (query) => {
+      let arr: DocumentData[] = [];
+      query.forEach((a) => {
+        arr.push(a);
+      });
+      setStudents(arr);
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <div className="font-sans flex flex-col justify-center w-full p-16">
       <div className="text-center text-3xl font-bold">Classroom Capacity</div>
       <div className="flex flex-col justify-center w-full">
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center">
-          {students.map((name, idx) => {
+          {students.map((doc) => {
             return (
-              <div key={name} className="items-center justify-center text-center border border-red-300">
-                <div>{name}</div>
+              <div
+                key={doc.data().first_name}
+                className="items-center justify-center text-center border border-red-300"
+              >
+                <div>{doc.data().first_name} {doc.data().last_name}</div>
                 <button
                   className="border"
-                  onClick={() => {
-                    setStudents(
-                      students.slice(0, idx).concat(students.slice(idx + 1))
-                    );
+                  onClick={async () => {
+                    await deleteDoc(doc.ref);
                   }}
                 >
                   Check out
