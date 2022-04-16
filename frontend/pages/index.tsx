@@ -32,7 +32,7 @@ const Index = () => {
             return (
               <div
                 key={doc.data().first_name}
-                className="items-center justify-center text-center border border-red-300"
+                className="flex flex-col items-center justify-between text-center border border-red-300 h-full break-all p-5"
               >
                 <div>{doc.data().first_name} {doc.data().last_name}</div>
                 <button
