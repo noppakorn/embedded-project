@@ -22,13 +22,30 @@ const Index = () => {
     });
     return unsubscribe;
   }, []);
-  console.log(students.length);
   return (
     <div className="font-sans flex flex-col justify-center w-full p-16">
       <div className="text-center text-3xl font-bold">
         Student Checked in to Classroom #1
       </div>
-      <div className="text-center text-3xl">student count: {students.length} </div>
+      <div className="text-center text-3xl">
+        student count: {students.length}{" "}
+      </div>
+      <div className="flex justify-center">
+        <div className="mb-3"></div>
+        <input
+          type="search"
+          className="form-control block w-full px-3 py-1.5 text-base font-normal
+                text-gray-700
+                bg-white bg-clip-padding
+                border border-solid border-gray-300
+                rounded
+                transition
+                ease-in-out
+                m-0"
+          id="exampleSearch"
+          placeholder="Type query"
+        ></input>
+      </div>
       <div className="flex flex-col justify-center w-full">
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center border p-5">
           {students.map((doc) => {
