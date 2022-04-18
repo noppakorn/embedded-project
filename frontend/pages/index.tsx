@@ -25,18 +25,22 @@ const Index = () => {
 
   return (
     <div className="font-sans flex flex-col justify-center w-full p-16">
-      <div className="text-center text-3xl font-bold">Classroom Capacity</div>
+      <div className="text-center text-3xl font-bold">
+        Student Checked in to Classroom #1
+      </div>
       <div className="flex flex-col justify-center w-full">
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center">
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center border p-5">
           {students.map((doc) => {
             return (
               <div
                 key={doc.data().first_name}
-                className="flex flex-col items-center justify-between text-center border border-red-300 h-full break-all p-5"
+                className="flex flex-col items-center justify-between text-center border h-full break-all p-5 hover:bg-gray-100"
               >
-                <div>{doc.data().first_name} {doc.data().last_name}</div>
+                <div className="text-xl font-bold">
+                  {doc.data().first_name} {doc.data().last_name}
+                </div>
                 <button
-                  className="border"
+                  className="border mt-2 p-1.5 hover:bg-red-200 hover:underline"
                   onClick={async () => {
                     await deleteDoc(doc.ref);
                   }}
