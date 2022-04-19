@@ -22,7 +22,9 @@ const Index = () => {
       let arr: DocumentData[] = [];
       query.forEach((a) => {
         if (
-          (a.data().first_name+" "+a.data().last_name).toLowerCase().includes(searchWord.toLowerCase())
+          (a.data().first_name + " " + a.data().last_name)
+            .toLowerCase()
+            .includes(searchWord.toLowerCase())
         ) {
           arr.push(a);
         }
