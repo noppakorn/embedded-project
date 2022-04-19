@@ -13,7 +13,6 @@ const Index = () => {
   const classroomCapacity = 50;
   const [students, setStudents] = useState<DocumentData[]>([]);
   const [wordEntered, setWordEntered] = useState("");
-  const [filteredData, setFilterData] = useState<DocumentData[]>([]);
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const db = getFirestore(firebase);
     const studentsRef = collection(db, "students-name");
@@ -23,12 +22,12 @@ const Index = () => {
       let arr: DocumentData[] = [];
       query.forEach((a) => {
         if (
-          a.data().first_name.toLowerCase().includes(searchWord.toLowerCase())
+          (a.data().first_name+" "+a.data().last_name).toLowerCase().includes(searchWord.toLowerCase())
         ) {
           arr.push(a);
         }
       });
-      setFilterData(arr);
+      setStudents(arr);
     });
   };
   useEffect(() => {
@@ -72,7 +71,7 @@ const Index = () => {
       </div>
       <div className="flex flex-col justify-center w-full">
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center border p-5">
-          {filteredData.map((doc) => {
+          {students.map((doc) => {
             return (
               <div
                 key={doc.data().first_name}
