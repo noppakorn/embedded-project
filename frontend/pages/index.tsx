@@ -11,23 +11,25 @@ import firebase from "../lib/firebase";
 
 const Index = () => {
   const [students, setStudents] = useState<DocumentData[]>([]);
-  const [wordEntered,setWordEntered] = useState("");
-  const [filteredData,setFilterData] = useState<DocumentData[]>([]);
-  const handleInput = (event)=>{
+  const [wordEntered, setWordEntered] = useState("");
+  const [filteredData, setFilterData] = useState<DocumentData[]>([]);
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const db = getFirestore(firebase);
     const studentsRef = collection(db, "students-name");
     const searchWord = event.target.value;
     setWordEntered(searchWord);
-    const newFilter = onSnapshot(studentsRef ,(query)=>{
+    const newFilter = onSnapshot(studentsRef, (query) => {
       let arr: DocumentData[] = [];
       query.forEach((a) => {
-        if(a.data().first_name.toLowerCase().includes(searchWord.toLowerCase())){
+        if (
+          a.data().first_name.toLowerCase().includes(searchWord.toLowerCase())
+        ) {
           arr.push(a);
         }
       });
       setFilterData(arr);
     });
-  }
+  };
   useEffect(() => {
     const db = getFirestore(firebase);
     const studentsRef = collection(db, "students-name");
