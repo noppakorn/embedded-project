@@ -74,7 +74,7 @@ const Index = () => {
           {filteredStudents.map((doc) => {
             return (
               <div
-                key={doc.data().first_name}
+                key={doc.id}
                 className="flex flex-col items-center justify-between text-center border h-full break-words p-5 hover:bg-gray-100 duration-300"
               >
                 <div className="text-xl font-bold">
