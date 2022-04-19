@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import firebase from "../lib/firebase";
 
 const Index = () => {
+  const classroomCapacity = 50;
   const [students, setStudents] = useState<DocumentData[]>([]);
   const [wordEntered, setWordEntered] = useState("");
   const [filteredData, setFilterData] = useState<DocumentData[]>([]);
@@ -47,8 +48,11 @@ const Index = () => {
       <div className="text-center text-3xl font-bold">
         Student Checked in to Classroom #1
       </div>
-      <div className="text-center text-3xl">
-        student count: {students.length}
+      <div className="flex flex-row border justify-center items-center text-center text-xl mt-5 p-5">
+        <span className="font-bold">Students in classroom :</span>&nbsp;
+        <span>
+          {students.length}/{classroomCapacity}
+        </span>
       </div>
       <div className="flex justify-center">
         <div className="mb-3"></div>
@@ -72,18 +76,18 @@ const Index = () => {
             return (
               <div
                 key={doc.data().first_name}
-                className="flex flex-col items-center justify-between text-center border h-full break-all p-5 hover:bg-gray-100"
+                className="flex flex-col items-center justify-between text-center border h-full break-words p-5 hover:bg-gray-100 duration-300"
               >
                 <div className="text-xl font-bold">
                   {doc.data().first_name} {doc.data().last_name}
                 </div>
                 <button
-                  className="border mt-2 p-1.5 hover:bg-red-200 hover:underline"
+                  className="border mt-2 p-2 hover:bg-red-300 hover:underline active:bg-red-400 duration-500 "
                   onClick={async () => {
                     await deleteDoc(doc.ref);
                   }}
                 >
-                  Check out
+                  Check Out
                 </button>
               </div>
             );
