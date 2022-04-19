@@ -1,37 +1,32 @@
 import {
-  arrayUnion,
   collection,
   deleteDoc,
   DocumentData,
   getFirestore,
   onSnapshot,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import firebase from "../lib/firebase";
 
 const Index = () => {
   const classroomCapacity = 50;
   const [students, setStudents] = useState<DocumentData[]>([]);
-  const [wordEntered, setWordEntered] = useState("");
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const db = getFirestore(firebase);
-    const studentsRef = collection(db, "students-name");
-    const searchWord = event.target.value;
-    setWordEntered(searchWord);
-    const newFilter = onSnapshot(studentsRef, (query) => {
-      let arr: DocumentData[] = [];
-      query.forEach((a) => {
-        if (
-          (a.data().first_name + " " + a.data().last_name)
-            .toLowerCase()
-            .includes(searchWord.toLowerCase())
-        ) {
-          arr.push(a);
-        }
-      });
-      setStudents(arr);
-    });
-  };
+  const [filteredStudents, setFilteredStudents] = useState<DocumentData[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setFilteredStudents(
+      students.filter(
+        (a) =>
+          a
+            .data()
+            .first_name.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          a.data().last_name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [students, searchQuery]);
+
   useEffect(() => {
     const db = getFirestore(firebase);
     const studentsRef = collection(db, "students-name");
@@ -44,6 +39,7 @@ const Index = () => {
     });
     return unsubscribe;
   }, []);
+
   return (
     <div className="font-sans flex flex-col justify-center w-full p-16 space-y-4">
       <div className="text-center text-3xl font-bold">
@@ -67,13 +63,15 @@ const Index = () => {
                 rounded transition ease-in-out m-0"
           id="Search"
           placeholder="Search"
-          value={wordEntered}
-          onChange={handleInput}
+          value={searchQuery}
+          onChange={(event) => {
+            setSearchQuery(event.target.value);
+          }}
         ></input>
       </div>
       <div className="flex flex-col justify-center w-full">
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center border p-5">
-          {students.map((doc) => {
+          {filteredStudents.map((doc) => {
             return (
               <div
                 key={doc.data().first_name}
