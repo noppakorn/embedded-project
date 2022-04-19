@@ -16,13 +16,10 @@ const Index = () => {
 
   useEffect(() => {
     setFilteredStudents(
-      students.filter(
-        (a) =>
-          a
-            .data()
-            .first_name.toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          a.data().last_name.toLowerCase().includes(searchQuery.toLowerCase())
+      students.filter((a) =>
+        (a.data().first_name + " " + a.data().last_name)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       )
     );
   }, [students, searchQuery]);
