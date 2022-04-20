@@ -39,7 +39,7 @@ const Index = () => {
 
   return (
     <div
-      className="font-sans flex flex-col justify-center w-full h-screen p-16 space-y-4
+      className="font-sans flex flex-col justify-center w-full h-full p-16 space-y-4
           dark:text-[#FAFAFA] dark:bg-stone-900"
     >
       <div className="text-center text-3xl font-bold dark:text-[#f4a7bb]">
