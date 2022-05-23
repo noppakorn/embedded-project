@@ -22,6 +22,11 @@ export default async function handler(
       } else {
         res.status(404).end("Not found");
       }
+    } else if (typeof req.query.card_id === "string") {
+      res.status(200).json({
+        status: "OK",
+        receivedData: req.query.card_id,
+      });
     } else {
       res.status(500).end();
     }
