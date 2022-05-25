@@ -26,8 +26,8 @@ const Index = () => {
 
   useEffect(() => {
     const db = getFirestore(firebase);
-    const studentsRef = collection(db, "students-name");
-    const unsubscribe = onSnapshot(studentsRef, (query) => {
+    const roomRef = collection(db, "room");
+    const unsubscribe = onSnapshot(roomRef, (query) => {
       let arr: DocumentData[] = [];
       query.forEach((a) => {
         arr.push(a);
