@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import {
   collection,
   deleteDoc,
@@ -100,7 +99,7 @@ const Index = () => {
                 <div className="text-xl font-bold">
                   {doc.data().first_name} {doc.data().last_name}
                 </div>
-                <div>
+                <div className="text-gray-500">
                   {timeMessage}
                 </div>
                 <button
