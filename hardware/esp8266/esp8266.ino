@@ -2,10 +2,11 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <Wire.h>
+const int MAX_LEN = 10;
 
 const char *ssid = "meenmeen";
 const char *password = "molar=mol/L";
-String url = "https://embedded-project.vercel.app/api/user?card_id=";
+String url = "https://embedded-project.vercel.app/api/user";
 
 void setup() {
   Serial.begin(115200);
@@ -32,19 +33,18 @@ void loop() {
 
     HTTPClient https;
     int idx = 0;
-    char recv_card_id[11];
-    Wire.requestFrom(8, 10);    // request 10 bytes from peripheral device #8
+    char recv_card_id[MAX_LEN + 1];
+    Wire.requestFrom(8, MAX_LEN);    // request 10 bytes from peripheral device #8
     while (Wire.available()) {  // peripheral may send less than requested
       recv_card_id[idx++] = Wire.read(); // receive a byte as character
     }
-    recv_card_id[10] = '\0';
-    if (idx == 10) {
-      char buf[100];
-      sprintf(buf, "%s%s", url.c_str(), recv_card_id);
-      String fullUrl(buf);
-      Serial.println("Requesting " + fullUrl);
-      if (https.begin(client, fullUrl)) {
-        int httpCode = https.GET();
+    recv_card_id[MAX_LEN] = '\0';
+    if (idx > 0) {
+      if (https.begin(client, url)) {
+        String post_data = "card_id=" + String(recv_card_id);
+        Serial.println("Requesting " + url + " With data: " + post_data);
+        https.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        int httpCode = https.POST(post_data);
         Serial.println("Response code: " + String(httpCode));
         if (httpCode > 0) {
           Serial.println(https.getString());

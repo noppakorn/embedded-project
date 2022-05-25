@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "MFRC522.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -102,17 +103,19 @@ int main(void) {
 
 	MFRC522_Init();
 	HAL_Delay(100);
-
+	int32_t count = 0;
 	int status;
-	int card[MAX_LEN + 1];
-	int previousCard[MAX_LEN + 1] = { 1 };
-
-	char debugBuffer[100];
+	int card[MAX_LEN + 1], previousCard[MAX_LEN + 1];
+	for (int i = 0; i < MAX_LEN + 1; ++i) {
+		card[i] = 0;
+		previousCard[i] = 0;
+	}
+	char debugBuffer[10000];
 	char i2cBuffer[11];
 
 	status = 0;
 	status = Read_MFRC522(VersionReg);
-	sprintf(debugBuffer, "ver:%x\r\n", status);
+	sprintf(debugBuffer, "Starting RC552 Version: %x\r\n", status);
 	HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer), 100);
 
 	/* USER CODE END 2 */
@@ -120,19 +123,31 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
+
 		status = MFRC522_Request(PICC_REQIDL, card);
 		if (status == MI_OK) {
 			status = MFRC522_Anticoll(card);
-			if (status == MI_OK) {
-				sprintf(debugBuffer, "---\r\nUID:%x %x %x %x\r\n---\r\n",
-						card[0], card[1], card[2], card[3]);
+			if (status == MI_OK && strcmp(card, previousCard)) {
+				sprintf(debugBuffer, "---\r\nRead successfully!\r\n");
+				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
+						100);
+				sprintf(debugBuffer, "UID: %x %x\r\n---\r\n", card[0], card[1]);
 				sprintf(i2cBuffer, "%x%x", card[0], card[1]);
 				HAL_I2C_Slave_Transmit(&hi2c1, i2cBuffer, strlen(i2cBuffer),
 				HAL_MAX_DELAY);
 				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
 						100);
+				strcpy(previousCard, card);
+				while (count++ < 3000) {
+					HAL_Delay(1);
+				}
+				count = 0;
+				for (int i = 0; i < MAX_LEN + 1; ++i) {
+					previousCard[i] = 0;
+				}
+				sprintf(debugBuffer, "Previous Card Reset\r\n");
+				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer), 100);
 			}
-
 		}
 
 		/* USER CODE END WHILE */
