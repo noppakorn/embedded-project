@@ -9,6 +9,7 @@ import {
   QuerySnapshot,
   addDoc,
   deleteDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 export default async function handler(
@@ -45,7 +46,10 @@ export default async function handler(
       } else {
         // Student already in room => check in
         const roomRef = collection(db, "room");
-        await setDoc(doc(roomRef, req.body.card_id), querySnapshot.data()).then(
+        await setDoc(doc(roomRef, req.body.card_id), {
+          timestamp: serverTimestamp(),
+          ...querySnapshot.data()
+        }).then(
           () => {
             res.status(200).json({
               status: "checked_in",
