@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import {
   collection,
   deleteDoc,
@@ -13,6 +14,7 @@ const Index = () => {
   const [students, setStudents] = useState<DocumentData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<DocumentData[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
     setFilteredStudents(
@@ -35,6 +37,13 @@ const Index = () => {
       setStudents(arr);
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(Date.now());
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -76,6 +85,9 @@ const Index = () => {
               >
                 <div className="text-xl font-bold">
                   {doc.data().first_name} {doc.data().last_name}
+                </div>
+                <div>
+                  checked in {Math.floor(((time - new Date(doc.data().timestamp.seconds*1000).getTime()) / 1000) / 60)} minutes ago
                 </div>
                 <button
                   className="border mt-2 p-2 hover:bg-red-300 hover:underline active:bg-red-400 duration-500 "
