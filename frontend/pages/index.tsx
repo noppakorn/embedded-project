@@ -47,11 +47,11 @@ const Index = () => {
 
   return (
     <div
-      className="font-sans flex flex-col justify-center w-full h-full p-16 space-y-4
+      className="font-sans flex flex-col justify-center w-full h-full p-16 space-y-4 min-h-screen
           dark:text-[#FAFAFA] dark:bg-stone-900"
     >
       <div className="text-center text-3xl font-bold dark:text-[#f4a7bb]">
-        Student Checked in to Classroom #1
+        Student Checked in to Classroom
       </div>
       <div
         className="flex flex-row border justify-center items-center text-center text-xl mt-5 p-5
@@ -74,7 +74,6 @@ const Index = () => {
                 rounded transition ease-in-out m-0
                 dark:bg-black dark:border-none dark:shadow-lg dark:shadow-black/40
                 dark:text-white"
-                
           id="Search"
           placeholder="Search"
           value={searchQuery}
@@ -89,19 +88,21 @@ const Index = () => {
         dark:border-none"
         >
           {filteredStudents.map((doc) => {
-            let checkinTime = Math.floor(((time - new Date(doc.data().timestamp.seconds * 1000).getTime()) / 1000) / 60);
+            let checkinTime = Math.floor(
+              (time - new Date(doc.data().timestamp.seconds * 1000).getTime()) /
+                1000 /
+                60
+            );
             let timeMessage = "";
-            if(checkinTime <= 1) {
-              timeMessage = "check in a minute ago"
-            }
-            else if(checkinTime > 1 && checkinTime < 60) {
-              timeMessage = "check in " + checkinTime + " minutes ago" 
-            }
-            else if(checkinTime >= 60 && checkinTime < 120) {
-              timeMessage = "check in 1 hour ago" 
-            }
-            else {
-              timeMessage = "check in " + Math.floor(checkinTime / 60) + " hours ago" 
+            if (checkinTime <= 1) {
+              timeMessage = "check in a minute ago";
+            } else if (checkinTime > 1 && checkinTime < 60) {
+              timeMessage = "check in " + checkinTime + " minutes ago";
+            } else if (checkinTime >= 60 && checkinTime < 120) {
+              timeMessage = "check in 1 hour ago";
+            } else {
+              timeMessage =
+                "check in " + Math.floor(checkinTime / 60) + " hours ago";
             }
             return (
               <div
@@ -114,9 +115,7 @@ const Index = () => {
                 <div className="text-xl font-500">
                   {doc.data().first_name} {doc.data().last_name}
                 </div>
-                <div className="text-gray-500">
-                  {timeMessage}
-                </div>
+                <div className="text-gray-500">{timeMessage}</div>
                 <button
                   className="border mt-2 p-2 hover:bg-red-300 font-bold hover:underline active:bg-red-400 duration-500 
                   dark:bg-[#f4a7bb] dark:border-none rounded-md dark:shadow-lg dark:shadow-[#f4a7bb]/50 dark:hover:bg-[#f8567b]"
