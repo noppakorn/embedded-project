@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "MFRC522.h"
 #include "string.h"
+#include "lcd1602.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,6 +42,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 SPI_HandleTypeDef hspi2;
 
@@ -56,6 +58,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -95,6 +98,7 @@ int main(void) {
 	MX_USART2_UART_Init();
 	MX_SPI2_Init();
 	MX_I2C1_Init();
+	MX_I2C2_Init();
 	/* USER CODE BEGIN 2 */
 
 	HAL_GPIO_WritePin(RC522_Rst_GPIO_Port, RC522_Rst_Pin, GPIO_PIN_SET);
@@ -117,36 +121,79 @@ int main(void) {
 	status = Read_MFRC522(VersionReg);
 	sprintf(debugBuffer, "Starting RC552 Version: %x\r\n", status);
 	HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer), 100);
-
+	LCD_Init(LCD_ADDR);
+	LCD_WriteLine(LCD_ADDR, 0, "Tap Card to");
+	LCD_WriteLine(LCD_ADDR, 1, "Check in/out");
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-
+//		sprintf(debugBuffer, "\r\nWaiting!\r\n");
 		status = MFRC522_Request(PICC_REQIDL, card);
 		if (status == MI_OK) {
+
 			status = MFRC522_Anticoll(card);
 			if (status == MI_OK && strcmp(card, previousCard)) {
+				LCD_Clear(LCD_ADDR);
 				sprintf(debugBuffer, "---\r\nRead successfully!\r\n");
+				LCD_WriteLine(LCD_ADDR, 0, "Read Card UID:");
 				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
 						100);
 				sprintf(debugBuffer, "UID: %x %x\r\n---\r\n", card[0], card[1]);
+
 				sprintf(i2cBuffer, "%x%x", card[0], card[1]);
+				LCD_WriteLine(LCD_ADDR, 1, i2cBuffer);
+
 				HAL_I2C_Slave_Transmit(&hi2c1, i2cBuffer, strlen(i2cBuffer),
 				HAL_MAX_DELAY);
 				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
 						100);
-				strcpy(previousCard, card);
-				while (count++ < 3000) {
-					HAL_Delay(1);
+				char lengthBuffer[4];
+				lengthBuffer[3] = '\0';
+				char studentInfoBuffer[200];
+				HAL_I2C_Slave_Receive(&hi2c1, lengthBuffer, 3, HAL_MAX_DELAY);
+				HAL_I2C_Slave_Receive(&hi2c1, studentInfoBuffer,
+						atoi(lengthBuffer), HAL_MAX_DELAY);
+
+				studentInfoBuffer[atoi(lengthBuffer)] = '\0';
+				LCD_Clear(LCD_ADDR);
+				if (studentInfoBuffer[0] == '0') {
+					LCD_WriteLine(LCD_ADDR, 0, "User Checked:");
+					LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer);
+				} else if (studentInfoBuffer[0] == '1') {
+					// TODO: Determine if check in of check out
+					HAL_UART_Transmit(&huart2, studentInfoBuffer, strlen(studentInfoBuffer), 100);
+					if (studentInfoBuffer[1] == '1' ) {
+						LCD_WriteLine(LCD_ADDR, 0, "User Checked In:");
+						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer + 2);
+
+					} else if (studentInfoBuffer[1] == '0') {
+						LCD_WriteLine(LCD_ADDR, 0, "User Checked Out:");
+						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer + 2);
+
+					} else {
+						LCD_WriteLine(LCD_ADDR, 0, "Status Error:");
+						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer);
+					}
+				} else if (studentInfoBuffer[0] == '2') {
+					// User not in Database
+					LCD_WriteLine(LCD_ADDR, 0, "User not in db");
+				} else {
+					LCD_WriteLine(LCD_ADDR, 0, "Invalid Message");
 				}
-				count = 0;
+				HAL_Delay(3000);
+				LCD_Clear(LCD_ADDR);
+				LCD_WriteLine(LCD_ADDR, 0, "Tap Card to");
+				LCD_WriteLine(LCD_ADDR, 1, "Check in/out");
+
+				strcpy(previousCard, card);
 				for (int i = 0; i < MAX_LEN + 1; ++i) {
 					previousCard[i] = 0;
 				}
-				sprintf(debugBuffer, "Previous Card Reset\r\n");
-				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer), 100);
+				sprintf(debugBuffer, "Done\r\n");
+				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
+						100);
 			}
 		}
 
@@ -229,6 +276,38 @@ static void MX_I2C1_Init(void) {
 	/* USER CODE BEGIN I2C1_Init 2 */
 
 	/* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+ * @brief I2C2 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_I2C2_Init(void) {
+
+	/* USER CODE BEGIN I2C2_Init 0 */
+
+	/* USER CODE END I2C2_Init 0 */
+
+	/* USER CODE BEGIN I2C2_Init 1 */
+
+	/* USER CODE END I2C2_Init 1 */
+	hi2c2.Instance = I2C2;
+	hi2c2.Init.ClockSpeed = 100000;
+	hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+	hi2c2.Init.OwnAddress1 = 0;
+	hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	hi2c2.Init.OwnAddress2 = 0;
+	hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	if (HAL_I2C_Init(&hi2c2) != HAL_OK) {
+		Error_Handler();
+	}
+	/* USER CODE BEGIN I2C2_Init 2 */
+
+	/* USER CODE END I2C2_Init 2 */
 
 }
 
