@@ -6,10 +6,9 @@ import {
   collection,
   setDoc,
   getDoc,
-  QuerySnapshot,
-  addDoc,
   deleteDoc,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 
 export default async function handler(
@@ -44,19 +43,28 @@ export default async function handler(
           });
         });
       } else {
-        // Student already in room => check in
+        // Student not in room => check in
         const roomRef = collection(db, "room");
-        await setDoc(doc(roomRef, req.body.card_id), {
-          timestamp: serverTimestamp(),
-          ...querySnapshot.data()
-        }).then(
-          () => {
-            res.status(200).json({
-              status: "checked_in",
-              ...querySnapshot.data(),
-            });
-          }
-        );
+        const roomDetailRef = (await getDoc(doc(db, "room-detail", "default-room"))).data();
+        const roomCapacity = (roomDetailRef !== undefined) ? roomDetailRef.capacity : 0;
+        const countStudentInRoom = (await getDocs(roomRef)).size;
+        if(countStudentInRoom < roomCapacity) {
+          await setDoc(doc(roomRef, req.body.card_id), {
+            timestamp: serverTimestamp(),
+            ...querySnapshot.data()
+          }).then(
+            () => {
+              res.status(200).json({
+                status: "checked_in",
+                ...querySnapshot.data(),
+              });
+            }
+          );
+        } else {
+          res.status(405).json({
+            status: "room-full",
+          });
+        }
       }
     } else {
       res.status(404).end("Student does not exists");
