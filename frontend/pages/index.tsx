@@ -3,10 +3,8 @@ import {
   collection,
   deleteDoc,
   DocumentData,
-  getDoc,
   getFirestore,
   onSnapshot,
-  query,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import firebase from "../lib/firebase";
