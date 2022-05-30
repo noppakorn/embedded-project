@@ -73,7 +73,7 @@ const Index = () => {
           <div className="flex flex-row">
             <input
               id="capacity-input"
-              type="search"
+              type="number"
               value={capacityInput}
               onChange={(event) => {
                 setCapacityInput(event.target.value);
