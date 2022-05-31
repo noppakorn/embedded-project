@@ -45,24 +45,27 @@ export default async function handler(
       } else {
         // Student not in room => check in
         const roomRef = collection(db, "room");
-        const roomDetailRef = (await getDoc(doc(db, "room-detail", "default-room"))).data();
-        const roomCapacity = (roomDetailRef !== undefined) ? roomDetailRef.capacity : 0;
-        const countStudentInRoom = (await getDocs(roomRef)).size;
-        if (countStudentInRoom < roomCapacity) {
+        const roomDetailRef = (
+          await getDoc(doc(db, "room-detail", "default-room"))
+        ).data();
+        const capacity =
+          roomDetailRef !== undefined ? roomDetailRef.capacity : 0;
+        const occupancy = (await getDocs(roomRef)).size;
+        if (occupancy < capacity) {
           await setDoc(doc(roomRef, req.body.card_id), {
             timestamp: serverTimestamp(),
-            ...querySnapshot.data()
-          }).then(
-            () => {
-              res.status(200).json({
-                status: "checked_in",
-                ...querySnapshot.data(),
-              });
-            }
-          );
+            ...querySnapshot.data(),
+          }).then(() => {
+            res.status(200).json({
+              status: "checked_in",
+              ...querySnapshot.data(),
+            });
+          });
         } else {
           res.status(200).json({
             status: "room_full",
+            occupancy,
+            capacity,
           });
         }
       }
