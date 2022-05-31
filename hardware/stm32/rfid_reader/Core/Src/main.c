@@ -129,10 +129,9 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-//		sprintf(debugBuffer, "\r\nWaiting!\r\n");
+
 		status = MFRC522_Request(PICC_REQIDL, card);
 		if (status == MI_OK) {
-
 			status = MFRC522_Anticoll(card);
 			if (status == MI_OK && strcmp(card, previousCard)) {
 				LCD_Clear(LCD_ADDR);
@@ -159,19 +158,20 @@ int main(void) {
 				studentInfoBuffer[atoi(lengthBuffer)] = '\0';
 				LCD_Clear(LCD_ADDR);
 				if (studentInfoBuffer[0] == '0') {
-					LCD_WriteLine(LCD_ADDR, 0, "User Checked:");
-					LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer);
+					// http response code < 0 => Request Error
+					LCD_WriteLine(LCD_ADDR, 0, "Request Error");
 				} else if (studentInfoBuffer[0] == '1') {
-					// TODO: Determine if check in of check out
+					// Check in and check out
 					HAL_UART_Transmit(&huart2, studentInfoBuffer, strlen(studentInfoBuffer), 100);
 					if (studentInfoBuffer[1] == '1' ) {
 						LCD_WriteLine(LCD_ADDR, 0, "User Checked In:");
 						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer + 2);
-
 					} else if (studentInfoBuffer[1] == '0') {
 						LCD_WriteLine(LCD_ADDR, 0, "User Checked Out:");
 						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer + 2);
-
+					} else if (studentInfoBuffer[1] == '2') {
+						LCD_WriteLine(LCD_ADDR, 0, "Room Full");
+						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer + 2);
 					} else {
 						LCD_WriteLine(LCD_ADDR, 0, "Status Error:");
 						LCD_WriteLine(LCD_ADDR, 1, studentInfoBuffer);
@@ -191,7 +191,7 @@ int main(void) {
 				for (int i = 0; i < MAX_LEN + 1; ++i) {
 					previousCard[i] = 0;
 				}
-				sprintf(debugBuffer, "Done\r\n");
+				sprintf(debugBuffer, "\r\nDone\r\n");
 				HAL_UART_Transmit(&huart2, debugBuffer, strlen(debugBuffer),
 						100);
 			}

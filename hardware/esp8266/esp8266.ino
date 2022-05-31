@@ -70,10 +70,12 @@ void loop() {
             // Check in 1 - OK 1 - Check in
             String first_name = doc["first_name"];
             i2cWrite(8, "11" + first_name);
-          } else {
+          } else if (!strcmp(doc["status"], "checked_out")){
             // Check in 1 - OK 0 - Check out
             String first_name = doc["first_name"];
             i2cWrite(8, "10" + first_name);
+          } else if (!strcmp(doc["status"], "room_full")){
+            i2cWrite(8, "12" + String(doc["occupancy"]) + "/" + String(doc["capacity"]));
           }
           Serial.println(response);
         } else {
