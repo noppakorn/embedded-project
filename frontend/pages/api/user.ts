@@ -61,7 +61,7 @@ export default async function handler(
             }
           );
         } else {
-          res.status(405).json({
+          res.status(200).json({
             status: "room_full",
           });
         }
