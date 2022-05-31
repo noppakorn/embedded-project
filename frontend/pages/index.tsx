@@ -82,12 +82,13 @@ const Index = () => {
                 dark:bg-black dark:border-none dark:shadow-lg dark:shadow-black/40
                 dark:text-white"
           id="Classroom Capacity"
+          type="number"
           placeholder={classroomCapacity}
           value={classroomCapacity}
           onChange={async (event) => {
             const db = getFirestore(firebase);
             await setDoc(doc(db, "room-detail", "default-room"), {
-              capacity: event.target.value,
+              capacity: parseInt(event.target.value),
             });
           }}
         ></input>
