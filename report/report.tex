@@ -60,8 +60,16 @@
     \item RFID-RC522
     \item LCD Screen (LCD1602)
 \end{enumerate}
+\section{Usage}
+\begin{enumerate}
+    \item usage...
+\end{enumerate}
 \section{Website}
 \url{https://embedded-project.vercel.app}
+\subsection{Website Usage}
+\begin{enumerate}
+    \item usage...
+\end{enumerate}
 \section{Source Code}
 Source Code และเอกสารเกี่ยวกับ Project สามารถเข้าถึงได้ที่ \url{https://github.com/noppakorn/embedded-project}
 \pagebreak
@@ -149,12 +157,11 @@ Source Code ของ API อยู่ที่ \url{https://github.com/noppakor
 \subsection{Embedded System Development}
 By: Noppakorn Jiravaranun\\
 \subsubsection{Responsibility}
-\begin{itemize}
+\begin{enumerate}
     \item การเชื่อมต่อระหว่าง Sensor และ Hardware
     \item การโปรแกรม STM32
     \item การโปรแกรม ESP8266
-    \item การเชื่อมต่อของ ESP8266 กับ API
-\end{itemize}
+\end{enumerate}
 \subsubsection{Hardware Connectivity}
 Hardware ทั้งหมดเชื่อต่อกันโดยมี STM32 NUCLEO F411-RE เป็นศูนย์กลาง โดยมีการเชื่อมต่อกันดังน้ี
 \begin{enumerate}
@@ -163,14 +170,37 @@ Hardware ทั้งหมดเชื่อต่อกันโดยมี S
     \item LCD Screen (LCD1602) เชื่อมต่อกับ STM32 โดย I2C
 \end{enumerate}
 \includegraphics[]{Diagram.png}
-\subsubsection{หน้าที่ของ Hardware}
+\subsubsection{Function of Hardware}
 \begin{itemize}
     \item STM32 NUCLEO F411-RE มีหน้าที่เป็นศูนย์กลางการเชื่อมต่อระหว่าง Hardware ต่างๆ และประมวลผลที่ได้รับจาก NodeMCU
     \item NodeMCU ESP8266 มีหน้าที่ติดต่อไปยัง API ที่ Host บน Vercel  โดยทำการ ส่ง GET และ POST Request ไปยัง \\ \url{https://embedded-project.vercel.app/api/user}  โดยส่งเป็นรหัสของบัตรนิสิต และจะได้ Response เป็นผลของการ Check In หรือ Check Out และทำการประมวลผลในขั้นต้นเพื่อให้ง่ายต่อการน้ำข้อมูลไปใช้บน STM32
     \item RFID Reader RC522 มีหน้าที่อ่านบัตรนิสิตเพื่อส่งข้อมูลให้ STM32
     \item LCD Screen (LCD1602) มีหน้าที่แสดงผลการ Check In ให้ผู้ใช้ทราบ
 \end{itemize}
-\subsubsection{การทำงานของ Embedded System}
+\subsubsection{ESP8266}
+\par ในงานได้มีการใช้งาน ESP8266 ซึ่งได้ทำการโปรแกรมโดยใช้ Arduino IDE และมีการใช้งาน library \textbf{Wire.h} ในการใช้งาน I2C สำหรับการติดต่อกับ STM32
+และ \textbf{ArduinoJson.h} ในช่วยประมวลผล Response จาก API
+\par ESP8266 จะมีขั้นตอนการทำงานดังนี้
+\begin{enumerate}
+    \item คอย monitor bus I2C ว่ามีการส่งจาก STM32 หรือไม่โดยจะ monitor จนกว่าจะมีการส่งข้อมูล ข้อมูลที่ส่งจาก STM32 จะเป็น card ID ซึ่งเป็น string ความยาว 10
+    \item เมื่อได้รับ string ครบถ้วนจะมีการส่ง POST Request ไปยัง API ที่ host ไว้ที่ Vercel
+    \item รอการตอบกลับจาก API ซึ่งจะได้การตอบกลับเป็น JSON โดยมีสถานะ http response code เป็น 200 หรือ 404 ถ้าเป็น response code นอกเหนือจากนีจะส่ง response แจ้งไปยัง STM32 ว่าเกิด error ขึ้น
+    \item ถ้า response code เป็น 404 แสดงถึงการไม่มี card ID ในฐานข้อมูล ก็จึงส่ง "2" ไปยัง STM32 แสดงการไม่มี user
+    \item ถ้า response code เป็น 200 แสดงถึงการมี card ID ในฐานข้อมูล โดยข้อมูลในช่อง "status" ของ JSON มีค่าที่เป็นไปได้ 3 ค่านั่นคือ checked\_in, checked\_out และ room\_full
+    \item จากนั้นทำการพิจารณาค่าที่ได้รับจาก API แล้วจึงส่ง "10" แสดงการ Check out หรือ "11" แสดงการ Check in ไปยัง STM32 โดยในสองกรณีข้างต้น จะมีการส่ง first name ของ user ไปด้วย กรณีห้องเต็มไม่สามารถ check in ได้ก็จะทำการส่ง "12" ไปยัง STM32 ตามด้วยการส่ง occupancy/capacity
+    \item เมื่อส่งข้อมูลเรียบร้อยจึงกลับไปทำงานขั้นตอนที่ 1
+\end{enumerate}
+\subsubsection{STM32}
+\par ในงานนี้ได้มีการใช้ STM32 NUCLEO F411-RE เป็นศูนย์กลางการเชื่อมต่อ hardware ทั้งหมด โดยมีการต่อกับ ESP8266 (โดย I2C), RC522 (โดย SPI) และ LCD1602 (โดย I2C) 
+โดย STM32 จะคอยรับข้อมูลจาก RC522 \\และส่งข้อมูลไปยัง ESP8266 เพื่อติดต่อ API และแสดงผลการทำงานผ่าน LCD1602\\
+\par การเขียนโปรแกรมบน STM32 ใช้ STM32CubeIDE และใช้ภาษา C โดยมีการใช้ library ของ MFRC522 และ LCD1602 ที่เป็น open source software
+\begin{enumerate}
+    \item คอยตรวจสอบบัตรเมื่อพบบัตรจึงส่ง Card ID ไปยัง ESP8266 ผ่าน I2C โดย Card ID เป็น string ความยาว 10
+    \item รอ response ซึ่งเป็นสถานะการทำงานจาก ESP8266
+    \item เมื่อได้รับสถานะ จึงแสดงข้อมูล ถ้าได้รับ สถานะ "10" และ "11" จะแสดงชื่อผู้เข้าใช้ ถ้าได้รับ "12" จะแสดงค่า occupancy ถ้าได้รับค่า "2" จะแสดงค่าว่าไม่มีผู้ใช้ ถ้าได้ค่าอื่นๆ จะแสดง error
+    \item เมื่อทำงานเสร็จสิ้นจึงกลับไปทำงานขั้นตอนที่ 1
+\end{enumerate}
+\subsubsection{Operation of the system}
 \begin{enumerate}
     \item STM32 คอยตรวจสอบบัตร  ผ่าน RFID Reader RC522 เมื่อพบบัตรจึงส่ง Card ID ไปยัง ESP8266 ผ่าน I2C
     \item เมื่อ ESP8266 ได้รับข้อมูลผ่าน I2C จึงส่งข้อมูลไปยัง api ที่ Vercel เมื่อได้รับข้อมูลกลับมา จึงส่งข้อมูลกลับไปยัง STM32
@@ -193,9 +223,17 @@ By: Nopparuj Poonsubanan
     \item ส่วนที่แสดงข้อมูลรายละเอียดของนักเรียนแต่ละคนที่ check in เข้าห้อง โดยจะมีการแสดงเวลาที่นักเรียนอยู่ในห้องและมีปุ่มสำหรับการ check out
 \end{enumerate}
 \subsubsection{Web Development}
-\par Web Development นั้นได้ปฎิบัติงานโดยนำ Frontend Design ที่กำหนดไว้ในขั้นตอนการ Design UX/UI มาสร้างเป็น Single Page Application
-\par ในงานนี้เลือกใช้ Next.js เป็น Frontend Web Development Framework เนื่องจากง่ายในการใช้งาน อีกทั้งยังมี Next API ที่ built-in ใน frontend อีกทั้งยังสามารถ Deploy ไปยัง Vercel ได้อย่างง่ายดาย
-\par เว็บไซต์ใช้การดึงข้อมูลจาก Firebase มาแสดงผล การแก้ไขข้อมูต่างๆ ใน Firebase ไม่ว่าการแก้ไขจาก Embedded System หรือการแก้ไขจากหน้าเว็บจะได้รับการอัพเดตโดยทันทีโดยไม่ต้องมี Interaction จาก user
+\par Web Development นั้นได้ปฎิบัติงานโดยนำ Frontend Design ที่กำหนดไว้ในขั้นตอนการ
+Design UX/UI มาสร้างเป็น Single Page Application
+\par ในงานนี้เลือกใช้ Next.js เป็น Frontend Web Development Framework
+เนื่องจากง่ายในการใช้งาน อีกทั้งยังมี Next API ที่ built-in ใน frontend
+อีกทั้งยังสามารถ Deploy ไปยัง Vercel ได้อย่างง่ายดาย
+\par เว็บไซต์ใช้การดึงข้อมูลจาก Firebase มาแสดงผล การแก้ไขข้อมูต่างๆ ใน Firebase
+ไม่ว่าการแก้ไขจาก Embedded System หรือการแก้ไขจากหน้าเว็บจะได้รับการอัพเดตโดยทันทีโดยไม่ต้องมี
+Interaction จาก user
+\par โดยในเว็บไซต์นั้นจะมีรายชื่อนิสิตที่ทำการ Check in ด้วยการแตะบัตร
+โดยผู้ใช้งานเว็บไซต์จะสามารถสั่ง Check out นิสิตจาก Dashboard ได้
+อีกทั้งยังสามารถปรับปริมาณนิสิตที่อนุญาติให้เข้ามาใช้งานในห้องได้
 \begin{center}
     \includegraphics[width=\textwidth]{Web.png}
 \end{center}
