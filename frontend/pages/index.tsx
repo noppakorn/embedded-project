@@ -1,15 +1,18 @@
 import {
   collection,
   deleteDoc,
+  doc,
   DocumentData,
+  getDoc,
   getFirestore,
   onSnapshot,
+  setDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import firebase from "../lib/firebase";
 
 const Index = () => {
-  const classroomCapacity = 50;
+  const [classroomCapacity, setClassroomCapacity] = useState("");
   const [students, setStudents] = useState<DocumentData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<DocumentData[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,6 +48,16 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const db = getFirestore(firebase);
+    const defaultRoom = doc(db, "room-detail", "default-room");
+    return onSnapshot(defaultRoom, (defaultRoom) => {
+      if (defaultRoom.exists()) {
+        setClassroomCapacity(defaultRoom.data().capacity);
+      }
+    });
+  }, []);
+
   return (
     <div
       className="font-sans flex flex-col justify-center w-full h-full p-16 space-y-4 min-h-screen
@@ -58,9 +71,26 @@ const Index = () => {
       dark:border-none"
       >
         <span className="font-bold">Students in classroom :</span>&nbsp;
-        <span>
-          {students.length}/{classroomCapacity}
-        </span>
+        <div>{students.length}/</div>
+        <input
+          className="form-control block px-3 py-1.5 w-16
+                text-base font-normal shadow-lg text-center
+                text-gray-700
+                bg-white bg-clip-padding
+                border border-solid border-gray-300
+                rounded transition ease-in-out m-0
+                dark:bg-black dark:border-none dark:shadow-lg dark:shadow-black/40
+                dark:text-white"
+          id="Classroom Capacity"
+          placeholder={classroomCapacity}
+          value={classroomCapacity}
+          onChange={async (event) => {
+            const db = getFirestore(firebase);
+            await setDoc(doc(db, "room-detail", "default-room"), {
+              capacity: event.target.value,
+            });
+          }}
+        ></input>
       </div>
       <div className="flex justify-center">
         <div className="mb-3"></div>
