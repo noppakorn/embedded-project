@@ -75,7 +75,7 @@ By: Thanaphum Thepwan\\
     \item จัดทำส่วนของการ Presentation
     \item ดูภาพรวมของ Project ให้เป็นไปตามเป้าหมาย
 \end{itemize}
-จากโจทย์ในการทำงานได้มาว่า Contactless Society ซึ่งจากการเป็น Team Management ซึ่งหัวข้อที่ได้เสนอไปก็คือ ทำระบบจำกัดจำนวนคนในห้องใช้ระบบ Checkin โดยใช้บัตรนิสิต หรือบัตร RFID ซึ่งเมื่อตกลงกันในกลุ่มแล้ว ได้กำหนดช่องทางการสื่อสารหลักเป็น Discord และได้แบ่งงานให้แต่ละคนดังนี้
+จากโจทย์ในการทำงานได้มาว่า Contactless Society ซึ่งจากการเป็น Team Management ซึ่งหัวข้อที่ได้เสนอไปก็คือ ทำระบบจำกัดจำนวนคนในห้องใช้ระบบ Checkin โดยใช้บัตรนิสิต หรือบัตร RFID ซึ่งเมื่อตกลงกันในกลุ่มแล้ว ได้\\กำหนดช่องทางการสื่อสารหลักเป็น Discord และได้แบ่งงานให้แต่ละคนดังนี้
 \begin{enumerate}
     \item Nanthicha: System Architecture\\ (จัดหา sensor ต่างๆที่ต้องใช้ ออกแบบระบบว่าแต่ละอุปกรณ์เชื่อมต่อกันได้อย่างไร)
     \item Noppakorn: Embedded System Development \\ (การโปรแกรมลง Board)
@@ -86,18 +86,28 @@ By: Thanaphum Thepwan\\
     \begin{adjustbox}{width=\textwidth}
         \begin{tabular}{ | c | c |  }
             \hline
-            งาน                                                                 & วันที่ดำเนินงาน                                              \\
+            งาน & วันที่ดำเนินงาน \\
             \hline
             \hline
-            กำหนดหัวข้อโปรเจกต์จากโจทย์ที่ได้รับ                                         & \formatdate{12}{04}{2022}                               \\
-            นำเสนอหัวข้อโปรเจกต์ให้อาจารย์อนุมัติ และได้                                  & \formatdate{20}{04}{2022}                               \\
-            กำหนดอุปกรณ์ที่ต้องใช้ทำงานร่วมกันครั้งแรก                                      & date                                                    \\
-            รับ ESP8266, RFID-RC522                                              & date                                                    \\
-            โปรแกรมทำให้ ESP8266                                                  & date                                                    \\
-            เชื่อมต่อกับเซนเซอร์ RFID-RC522 ให้สามารถอ่านบัตรได้                         & \formatdate{03}{05}{2022} และ \formatdate{20}{05}{2022} \\
-            ทำให้ข้อมูลที่อ่านได้จาก RFID-RC522 สามารถส่งขึ้นไปที่ Cloud ได้                  & \formatdate{23}{05}{2022}                               \\
-            ทำให้ Cloud Response data กลับมาที่ ESP8266 เพื่อที่จะนำข้อมูลไปแสดงบนหน้าจอ LCD & \formatdate{27}{05}{2022}                               \\
-            เชื่อมต่อจอ LCD Screen เพื่อให้สามารถแสดงข้อมูลได้จาก Cloud                  & Placeholder                                             \\
+            กำหนดหัวข้อโปรเจกต์จากโจทย์ที่ได้รับ & \formatdate{12}{04}{2022} \\
+            \hline
+            เริ่มจัดทำ frontend & \formatdate{13}{04}{2022} \\
+            \hline
+            ทำให้ส่วนของ frontend สามารถ fetch ข้อมูลจาก firebase ได้ & \formatdate{18}{04}{2022} \\
+            \hline
+            นำเสนอหัวข้อโปรเจกต์ให้อาจารย์อนุมัติ และได้กำหนดอุปกรณ์ที่ต้องใช้ & \formatdate{20}{04}{2022} \\                 
+            \hline
+            \makecell{ทำงานร่วมกันครั้งแรก รับ ESP8266, RFID-RC522\\และโปรแกรมทำให้ ESP8266 สามารถเชื่อม Internet ได้} & \formatdate{27}{04}{2022} \\
+            \hline
+            เชื่อมต่อกับเซนเซอร์ RFID-RC522 ให้สามารถอ่านบัตรได้ & \formatdate{03}{05}{2022} ถึง \formatdate{20}{05}{2022} \\
+            \hline
+            ทำให้ข้อมูลที่อ่านได้จาก RFID-RC522 สามารถส่งขึ้นไปที่ Cloud ได้ & \formatdate{23}{05}{2022} \\
+            \hline
+            \makecell{ทำให้ Cloud Response data กลับมาที่ ESP8266 \\เพื่อที่จะนำข้อมูลไปแสดงบนหน้าจอ LCD } & \formatdate{25}{05}{2022} \\
+            \hline
+            เชื่อมต่อจอ LCD Screen เพื่อให้สามารถแสดงข้อมูลได้จาก Cloud & \formatdate{27}{05}{2022} \\
+            \hline
+            จัดทำ Presentation และ Report & \formatdate{31}{05}{2022}\\
             \hline
         \end{tabular}
     \end{adjustbox}
