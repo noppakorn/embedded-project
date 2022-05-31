@@ -47,11 +47,11 @@
 \tableofcontents
 \pagebreak
 \section{Description}
-อุปกรณ์นี้เป็นอุปกรณ์สำหรับจำกัดจำนวนนิสิต หรือคนภายในห้อง ซึ่งต้องมีการแตะบัตรนิสิต หรือบัตร RFID ก่อนเข้าสถานที่ต่างๆ
-โดยจะบอกว่าตอนนี้มีคนอยู่ในห้องนั้นๆ กี่คนซึ่งเข้ากับสถานการณ์ระบาดของไวรัส COVID-19
+อุปกรณ์นี้เป็นอุปกรณ์สำหรับจำกัดจำนวนนิสิตหรือคนภายในห้อง ซึ่งต้องมีการแตะบัตรนิสิต หรือบัตร RFID ก่อนเข้าสถานที่ต่าง ๆ
+โดยจะบอกว่าตอนนี้มีคนอยู่ในห้องนั้น ๆ กี่คนซึ่งเข้ากับสถานการณ์ระบาดของไวรัส COVID-19
 ซึ่งในปัจจุบันมีการรณรงค์การ Social Distancing และลดการสัมผัสซึ่งอุปกรณ์ที่ออกแบบสามารถตอบสนองการใช้งานในส่วนนี้ได้เป็นอย่างดี
 โดยสามารถลดการสัมผัสระหว่างบุคคลและสามารถทำให้การตรวจชื่อนิสิตหรือคนที่อยู่ในห้องทำได้สะดวกขึ้น และยังประยุกต์หลักการของ IoT
-เข้ามาเพื่อช่วยให้สามารถแสดงผลการทํางานของอุปกรณ์ได้แบบ Real time
+เข้ามาเพื่อช่วยให้สามารถแสดงผลการทํางานของอุปกรณ์ได้แบบ Real-time
 \section{Device}
 อุปกรณ์ที่ใช้ประกอบด้วย\\
 \begin{enumerate}
@@ -62,13 +62,18 @@
 \end{enumerate}
 \section{Usage}
 \begin{enumerate}
-    \item usage...
+    \item User นำบัตรมาแตะที่ตัว Sensor RFID-RC522 โดยจะต้องเป็นบัตร RFID เช่น บัตรนิสิต เป็นต้น
+    \item LCD Screen จะแสดง UID ของบัตร และหาก User ไม่เคย Check-in จะขึ้นว่า User Checked-in หากมีการแตะบัตรอีกครั้งก็จะเป็นการ Check-out จะขึ้นว่า User Checked-out
+    \item กรณีที่ไม่มีข้อมูลของบัตรอยู่ในระบบ LCD Screen จะแสดงว่า User not in db (User ไม่ได้อยู่ในฐานข้อมูล)
 \end{enumerate}
 \section{Website}
 \url{https://embedded-project.vercel.app}
 \subsection{Website Usage}
 \begin{enumerate}
-    \item usage...
+    \item User สามารถปรับจำนวนคนที่มากที่สุดได้ โดยจะมีผลคือ หากถึงขีดจำกัดแล้วจะไม่สามารถ Check-in ได้อีก
+    \item บนหน้าเว็บไซต์จะแสดงข้อมูลของคนที่อยู่ในห้อง โดยจะแสดงชื่อ และแสดงว่า Check-in มานานแค่ไหนแล้ว
+    \item User สามารถกด Check-out ได้โดยไม่ต้องแตะบัตรอีกครั้ง (ผ่านปุ่ม Check Out ที่อยู่ด้านใต้ชื่อของคนที่อยู่ในห้อง)
+    \item User สามารถค้นหาชื่อของคนที่อยู่ในห้องได้จาก Search Box
 \end{enumerate}
 \section{Source Code}
 Source Code และเอกสารเกี่ยวกับ Project สามารถเข้าถึงได้ที่ \url{https://github.com/noppakorn/embedded-project}
@@ -79,14 +84,14 @@ By: Thanaphum Thepwan\\
 \subsubsection{Responsibility}
 \begin{itemize}
     \item เสนอหัวข้อ Project ในการทำงาน
-    \item ประสานงานกับทุกฝ่ายในกลุ่มในการกำหนดวันในการมาทำงานร่วมกัน การแบ่งงานในแต่ละส่วน
+    \item ประสานงานกับทุกฝ่ายในกลุ่มในการกำหนดวันในการมาทำงานร่วมกัน การแบ่งงานในแต่ละส่วน และช่วยทำในส่วนของงานที่ต้องการความช่วยเหลือ
     \item จัดทำส่วนของการ Presentation
     \item ดูภาพรวมของ Project ให้เป็นไปตามเป้าหมาย
 \end{itemize}
-จากโจทย์ในการทำงานได้มาว่า Contactless Society ซึ่งจากการเป็น Team Management ซึ่งหัวข้อที่ได้เสนอไปก็คือ ทำระบบจำกัดจำนวนคนในห้องใช้ระบบ Checkin โดยใช้บัตรนิสิต หรือบัตร RFID ซึ่งเมื่อตกลงกันในกลุ่มแล้ว ได้ \\
+จากโจทย์ในการทำงานได้มาว่า Contactless Society ซึ่งจากการเป็น Team Management ซึ่งหัวข้อที่ได้เสนอไปคือ ทำระบบจำกัดจำนวนคนในห้องใช้ระบบ Check-in โดยใช้บัตรนิสิต หรือบัตร RFID ซึ่งเมื่อตกลงกันในกลุ่มแล้ว ได้ \\
 กำหนดช่องทางการสื่อสารหลักเป็น Discord และได้แบ่งงานให้แต่ละคนดังนี้
 \begin{enumerate}
-    \item Nanthicha: System Architecture\\ (จัดหา sensor ต่างๆที่ต้องใช้ ออกแบบระบบว่าแต่ละอุปกรณ์เชื่อมต่อกันได้อย่างไร)
+    \item Nanthicha: System Architecture\\ (จัดหา sensor ต่าง ๆ ที่ต้องใช้ ออกแบบระบบว่าแต่ละอุปกรณ์เชื่อมต่อกันได้อย่างไร)
     \item Noppakorn: Embedded System Development \\ (การโปรแกรมลง Board)
     \item Nopparuj: รับผิดชอบในส่วนของ UI/UX Designer and Development\\ (ออกแบบพัฒนาเว็บไซต์)
 \end{enumerate}
@@ -151,7 +156,7 @@ By: Nanthicha Makjinda \\
 \subsubsection{API Design}
 \par การใช้งาน Embedded System กับ Firebase Firestore Database นั้นมีขั้นตอนการใช้งานที่ยุ่งยาก อีกทั้งยังต้องมี Boilerplate Code จำนวนมากในการใช้งาน และ Library ยังมี Feature  น้อยกว่า Library ใน JS ecosystem เป็นอย่างมาก จึงมีการ Design API เพื่อทำให้การ Development ของ Embedded System สะดวกขึ้นอีกทั้งยังเป็นการลดภาระของ Embedded System ทำให้ระบบมีประสิทธิภาพและความยืดหยุ่นมากขึ้น
 \par โดย Frontend มีการใช้งาน Next.js ซึ่งเป็น Frontend Web Developement Framework ที่มี Feature Next API ทำให้การสร้าง API สามารถทำได้ง่าย และสามารถนำไป Host ที่ Vercel ในที่เดียวกับ Website ได้เลยโดยไม่ทีค่าใช้จ่าย
-\par API นั้นเขียนโดยภาษา TypeScript โดยเป็น REST API ซึ่งทำการ handle POST Request โดย Embedded System นั่นคือ ESP8266 นั้นสามารถส่ง POST Request มายัง API ที่ \url{https://embedded-project.vercel.app/api/user} โดยใน request ส่งข้อมูลในรูปแบบ JSON โดยประกอบด้วย field card id โดย เป็น string hexadeciamal 10 หลัก จากนั้น API จะทำการตรวจสอบจาก database ว่ามีนิสิตคนนี้ในระบบหรือไม่ และทำการ Check in และ Check out ออกจากห้องเรียนนั้นๆ อีกทั้งยังมีการเช็คจำนวนนิสิตในห้องเรียน แล้วจึงตอบเป็น status ไปยัง ESP8266 เพื่อทำการประมวลผลและทำการแสดงผลต่อไป\\
+\par API นั้นเขียนโดยภาษา TypeScript โดยเป็น REST API ซึ่งทำการ handle POST Request โดย Embedded System นั่นคือ ESP8266 นั้นสามารถส่ง POST Request มายัง API ที่ \url{https://embedded-project.vercel.app/api/user} โดยใน request ส่งข้อมูลในรูปแบบ JSON โดยประกอบด้วย field card id โดย เป็น string hexadeciamal 10 หลัก จากนั้น API จะทำการตรวจสอบจาก database ว่ามีนิสิตคนนี้ในระบบหรือไม่ และทำการ Check in และ Check out ออกจากห้องเรียนนั้น ๆ อีกทั้งยังมีการเช็คจำนวนนิสิตในห้องเรียน แล้วจึงตอบเป็น status ไปยัง ESP8266 เพื่อทำการประมวลผลและทำการแสดงผลต่อไป\\
 Source Code ของ API อยู่ที่ \url{https://github.com/noppakorn/embedded-project/blob/main/frontend/pages/api/user.ts}
 \pagebreak
 \subsection{Embedded System Development}
@@ -172,7 +177,7 @@ Hardware ทั้งหมดเชื่อต่อกันโดยมี S
 \includegraphics[]{Diagram.png}
 \subsubsection{Function of Hardware}
 \begin{itemize}
-    \item STM32 NUCLEO F411-RE มีหน้าที่เป็นศูนย์กลางการเชื่อมต่อระหว่าง Hardware ต่างๆ และประมวลผลที่ได้รับจาก NodeMCU
+    \item STM32 NUCLEO F411-RE มีหน้าที่เป็นศูนย์กลางการเชื่อมต่อระหว่าง Hardware ต่าง ๆ และประมวลผลที่ได้รับจาก NodeMCU
     \item NodeMCU ESP8266 มีหน้าที่ติดต่อไปยัง API ที่ Host บน Vercel  โดยทำการ ส่ง GET และ POST Request ไปยัง \\ \url{https://embedded-project.vercel.app/api/user}  โดยส่งเป็นรหัสของบัตรนิสิต และจะได้ Response เป็นผลของการ Check In หรือ Check Out และทำการประมวลผลในขั้นต้นเพื่อให้ง่ายต่อการน้ำข้อมูลไปใช้บน STM32
     \item RFID Reader RC522 มีหน้าที่อ่านบัตรนิสิตเพื่อส่งข้อมูลให้ STM32
     \item LCD Screen (LCD1602) มีหน้าที่แสดงผลการ Check In ให้ผู้ใช้ทราบ
@@ -197,7 +202,7 @@ Hardware ทั้งหมดเชื่อต่อกันโดยมี S
 \begin{enumerate}
     \item คอยตรวจสอบบัตรเมื่อพบบัตรจึงส่ง Card ID ไปยัง ESP8266 ผ่าน I2C โดย Card ID เป็น string ความยาว 10
     \item รอ response ซึ่งเป็นสถานะการทำงานจาก ESP8266
-    \item เมื่อได้รับสถานะ จึงแสดงข้อมูล ถ้าได้รับ สถานะ "10" และ "11" จะแสดงชื่อผู้เข้าใช้ ถ้าได้รับ "12" จะแสดงค่า occupancy ถ้าได้รับค่า "2" จะแสดงค่าว่าไม่มีผู้ใช้ ถ้าได้ค่าอื่นๆ จะแสดง error
+    \item เมื่อได้รับสถานะ จึงแสดงข้อมูล ถ้าได้รับ สถานะ "10" และ "11" จะแสดงชื่อผู้เข้าใช้ ถ้าได้รับ "12" จะแสดงค่า occupancy ถ้าได้รับค่า "2" จะแสดงค่าว่าไม่มีผู้ใช้ ถ้าได้ค่าอื่น ๆ จะแสดง error
     \item เมื่อทำงานเสร็จสิ้นจึงกลับไปทำงานขั้นตอนที่ 1
 \end{enumerate}
 \subsubsection{Operation of the system}
@@ -228,7 +233,7 @@ Design UX/UI มาสร้างเป็น Single Page Application
 \par ในงานนี้เลือกใช้ Next.js เป็น Frontend Web Development Framework
 เนื่องจากง่ายในการใช้งาน อีกทั้งยังมี Next API ที่ built-in ใน frontend
 อีกทั้งยังสามารถ Deploy ไปยัง Vercel ได้อย่างง่ายดาย
-\par เว็บไซต์ใช้การดึงข้อมูลจาก Firebase มาแสดงผล การแก้ไขข้อมูต่างๆ ใน Firebase
+\par เว็บไซต์ใช้การดึงข้อมูลจาก Firebase มาแสดงผล การแก้ไขข้อมูต่าง ๆ ใน Firebase
 ไม่ว่าการแก้ไขจาก Embedded System หรือการแก้ไขจากหน้าเว็บจะได้รับการอัพเดตโดยทันทีโดยไม่ต้องมี
 Interaction จาก user
 \par โดยในเว็บไซต์นั้นจะมีรายชื่อนิสิตที่ทำการ Check in ด้วยการแตะบัตร
