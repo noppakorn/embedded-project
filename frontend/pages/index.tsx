@@ -83,6 +83,7 @@ const Index = () => {
                 dark:text-white"
           id="Classroom Capacity"
           type="number"
+          min={0}
           placeholder={classroomCapacity}
           value={classroomCapacity}
           onChange={async (event) => {
