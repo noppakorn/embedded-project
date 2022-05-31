@@ -1,0 +1,70 @@
+\documentclass[fontsize=14pt]{extarticle}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{fontspec}
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{datetime}
+\graphicspath{ {./images/}}
+\babelprovide[main, import]{thai}
+\babelfont{rm}{Sarabun}
+\usepackage{hyperref}
+\setmainfont[Path=fonts/,
+ BoldFont={Sarabun-Bold.ttf}, 
+ ItalicFont={Sarabun-Italic.ttf}, 
+ BoldItalicFont={Sarabun-BoldItalic.ttf}, 
+ ]{Sarabun-Regular.ttf}
+\setmonofont[Path=fonts/]{Sarabun-Bold.ttf}
+\geometry{margin=1in}
+\ddmmyyyydate
+\date{}
+
+\title{\huge\textbf{Room Capacity Limiter}}
+\author{Thanaphum Thepwan\\ Noppakorn Jiravaranun\\ Nopparuj Poonsubanan\\ Nanthicha Makjinda}
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge Room Capacity Limiter\\}
+    \vspace*{\fill}
+    {
+        \LARGE
+        \textbf{สมาชิก}\\~\\
+        Thanaphum Thepwan 6330223021\\
+        Noppakorn Jiravaranun 6330258021\\
+        Nopparuj Poonsubanan 6330261921\\
+        Nanthicha Makjinda 6330282021\\
+        \vspace*{\fill}
+        \textbf{เสนอ}\\~\\
+        อ.ดร.พิชญะ สิทธิอมร\\
+        \vspace*{\fill}
+        รายงานนี้เป็นส่วนหนึ่งวิชา 2110366 Embedded System Laboratory\\
+        ภาคการศึกษาปลาย ปีการศึกษา 2564
+    }
+\end{center}
+\pagebreak
+\tableofcontents
+\pagebreak
+\section{Description}
+ที่มาของงาน
+\section{Device}
+อุปกรณ์
+\subsection{Device Connectivity}
+\section{Web Interface}
+เว็บต่างๆ
+\section{Database and API}
+db
+\pagebreak
+\section{Roles and Responsibility}
+\begin{enumerate}
+    \item Nanthicha Makjinda: System Architecture
+          \pagebreak
+    \item Noppakorn Jiravaranun: Embedded System Development
+          \pagebreak
+    \item Nopparuj Poonsubanan: UI/UX Designer and Development
+          \pagebreak
+    \item Thanaphum Thepwan: Team Management
+          \pagebreak
+\end{enumerate}
+
+\end{document}
