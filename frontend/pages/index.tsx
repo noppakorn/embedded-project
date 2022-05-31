@@ -60,7 +60,7 @@ const Index = () => {
           dark:text-[#FAFAFA] dark:bg-stone-900"
     >
       <div className="text-center text-3xl font-bold dark:text-[#f4a7bb]">
-        Student Checked in to Classroom #1
+        Student Checked in to Classroom
       </div>
 
       <div className="flex justify-center">
