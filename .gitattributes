@@ -1,0 +1,9 @@
+hardware/stm32/rfid_reader/Drivers/** linguist-vendored
+hardware/stm32/rfid_reader/Core/Startup/** linguist-vendored
+
+hardware/stm32/rfid_reader/Core/Src/stm32*.c linguist-vendored
+hardware/stm32/rfid_reader/Core/Src/sys*.c linguist-vendored
+hardware/stm32/rfid_reader/Core/Src/MFRC522.c linguist-vendored
+
+hardware/stm32/rfid_reader/Core/Inc/stm32*.h linguist-vendored
+hardware/stm32/rfid_reader/Core/Inc/MFRC522.h -linguist-vendored

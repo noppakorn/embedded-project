@@ -1,9 +1,0 @@
-- hardware/stm32/rfid_reader/Drivers
-- hardware/stm32/rfid_reader/Core/Startup
-
-- hardware/stm32/rfid_reader/Core/Src/stm32*.c
-- hardware/stm32/rfid_reader/Core/Src/sys*.c
-- hardware/stm32/rfid_reader/Core/Src/MFRC522.c
-
-- hardware/stm32/rfid_reader/Core/Inc/stm32*.h
-- hardware/stm32/rfid_reader/Core/Inc/MFRC522.h
