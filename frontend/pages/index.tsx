@@ -73,7 +73,7 @@ const Index = () => {
         <span className="font-bold">Students in classroom :</span>&nbsp;
         <div>{students.length}/</div>
         <input
-          className="form-control block px-3 py-1.5 w-16
+          className="form-control block px-3 py-1.5 w-20
                 text-base font-normal shadow-lg text-center
                 text-gray-700
                 bg-white bg-clip-padding
