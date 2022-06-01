@@ -1,3 +1,6 @@
+report/** linguist-documentation
+hardware/stm32/rfid_reader/Drivers linguist-vendored
+hardware/stm32/rfid_reader/Drivers/* linguist-vendored
 hardware/stm32/rfid_reader/Drivers/** linguist-vendored
 hardware/stm32/rfid_reader/Core/Startup/** linguist-vendored
 
